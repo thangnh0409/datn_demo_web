@@ -1,0 +1,13 @@
+#user_info {
+    width: 400px;
+    margin: 70px auto;
+    text-align: left;
+}
+#user_avatar {
+    float: left;
+    width: 200px;
+}
+#text_info {
+    float: left;
+
+}

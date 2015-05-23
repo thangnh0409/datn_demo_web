@@ -1,0 +1,26 @@
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#tb_res tr:nth-child(even) {
+    background-color: #eee;
+}
+table#tb_res tr:nth-child(odd) {
+    background-color:#fff;
+}
+table#tb_res th	{
+    background-color: brown;
+    color: white;
+}
+
+ul#pagi li{float:left; margin: 3px; border: solid 1px gray;}
+ul#pagi a{padding: 5px;}
+ul#pagi {list-style-type: none;}
+ul#pagi span{display:inline-block; padding: 0px 3px; background: blue; color:white }

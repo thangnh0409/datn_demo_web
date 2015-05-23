@@ -1,0 +1,32 @@
+
+#detail_wrapper {
+    float: left;
+    width: 80%;
+    padding: 0px;
+    /*background-color: #0077CC;*/
+    /*min-height: 50px;*/
+    height: 100%;
+    margin: 20px auto;
+    background-image: url("../imgs/bg1.jpg");
+    background-size:   cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+#detail_title{
+    width: 100%;
+    background-color: #999999;
+    float: left;
+    max-height: 40px;
+    padding-bottom: 10px;
+    margin-top: 0px;
+    padding-top: 0px;
+    /*padding-left: 20px;*/
+}
+#detail_title>h3 {
+    padding-left: 30px;
+}
+#ad_info {
+    width: 400px;
+    margin: 70px auto;
+    text-align: left;
+}

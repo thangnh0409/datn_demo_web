@@ -12,7 +12,7 @@ include 'container.php';
 $server_name = "localhost";
 $username = "root";
 $password = "";
-$db_name = "amobi24_03";
+$db_name = "amobi18_05";
 
 $conn = mysql_connect($server_name, $username, $password);
 mysql_set_charset('utf8', $conn);

@@ -13,7 +13,7 @@ include 'pagination.php';
 $server_name = "localhost";
 $username = "root";
 $password = "";
-$db_name = "amobi24_03";
+$db_name = "amobi18_05";
 
 $conn = mysql_connect($server_name, $username, $password);
 mysql_set_charset('utf8', $conn);
@@ -64,12 +64,15 @@ if(isset($_GET['filter_by'])){
     $offset = ($page-1)*$limit;
     $i = $offset;
     if($filter_tag == 'top_clicked_ad'){
-        $sql = "SELECT name, widthBanner, heightBanner, sum_clicks FROM top_clicked_ad order by sum_clicks desc LIMIT $limit OFFSET $offset";
+        $sql = "SELECT name, widthBanner, heightBanner, sum_clicks FROM top_advertisement LIMIT $limit OFFSET $offset";
+//        $sql = "SELECT C.name, B.widthBanner, B.heightBanner, sum(A.clicks) as sum_clicks, A.date as date FROM widget_publisher_device as A INNER JOIN link as B ON A.link_id = B.id INNER JOIN advertistment as C ON B.adv_id = C.id GROUP BY A.link_id ORDER BY sum_clicks DESC LIMIT $limit OFFSET $offset";
         $retVal = mysql_query($sql, $conn);
         while($row = mysql_fetch_array($retVal, MYSQL_ASSOC)){
             $i++;
             $size = $row['widthBanner'].'x'.$row['heightBanner'];
-            $link = "ad_detail.php?name=".$row['name']."&rate_value=3&size=".$size."&cat=edu";
+            $ad_name = $row['name'];
+            $ad_name = str_replace(' ', '%20', $ad_name);
+            $link = "ad_detail.php?name=".$ad_name."&rate_value=3&size=".$size."&cat=edu";
             echo "<tr>".
                 "<td>$i</td>".
                 "<td><a href={$link}>{$row['name']}</a></td>".
@@ -78,15 +81,21 @@ if(isset($_GET['filter_by'])){
                 "</tr>";
         }
     }else if($filter_tag == 'top_user_click'){
-        $sql = "SELECT device_id, sum_click, sum_views FROM top_user_click ORDER BY sum_click DESC LIMIT $limit OFFSET $offset";
+        $sql = "SELECT device_id, sum_clicks, sum_views, city, device_model, manufacturer FROM top_user LIMIT $limit OFFSET $offset";
         $retVal = mysql_query($sql, $conn);
         while($row = mysql_fetch_array($retVal, MYSQL_ASSOC)){
             $i++;
-            $link = "user_detail.php?uid={$row['device_id']}&local=HaNoi&os=iOS&gender=male";
+            $device_model = $row['device_model'];
+            $manuf = $row['manufacturer'];
+            $city = $row['city'];
+            $device_model = str_replace(' ', '%20', $device_model);
+            $manuf = str_replace(' ', '%20', $manuf);
+            $city = str_replace(' ', '%20', $city);
+            $link = "user_detail.php?uid={$row['device_id']}&device_model={$device_model}&manufacturer={$manuf}&local={$city}";
             echo "<tr>".
                 "<td>$i</td>".
                 "<td><a href={$link}>{$row['device_id']}</a></td>".
-                "<td>{$row['sum_click']}</td>".
+                "<td>{$row['sum_clicks']}</td>".
                 "<td>{$row['sum_views']}</td>".
                 "</tr>";
         }

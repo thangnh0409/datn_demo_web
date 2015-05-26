@@ -11,6 +11,5 @@
     </div> <!-- end div wrapper -->
 
     <div id="footer"></div>
-    <div class="modal"></div>
     </body>
 </html>

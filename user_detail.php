@@ -11,9 +11,8 @@ include 'left_slidebar.php';
 
 $u_id = $_GET['uid'];
 $u_location = $_GET['local'];
-$os_device = $_GET['os'];
-$u_gender = $_GET['gender'];
-
+$device_model = $_GET['device_model'];
+$manufacturer = $_GET['manufacturer'];
 ?>
 
 <div id="detail_wrapper">
@@ -23,10 +22,10 @@ $u_gender = $_GET['gender'];
             <img src="imgs/default-avatar.png" width="170px" height="200px">
         </div>
         <div id="text_info">
-            <p>User ID: <?php echo $u_id ?></p>
+            <p>ID người dùng: <?php echo $u_id ?></p>
             <p>Khu vực: <?php echo $u_location ?></p>
-            <p>Giới tính : <?php echo $u_gender ?> </p>
-            <p>OS Device : <?php echo $os_device ?> </p>
+            <p>Model thiết bị : <?php echo $device_model ?> </p>
+            <p>Nhà sản xuất thiết bị: <?php echo $manufacturer ?> </p>
         </div>
     </div>
 </div>

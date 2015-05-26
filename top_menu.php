@@ -74,12 +74,6 @@
 
             });
 
-            $body = $("body");
-            $(document).on({
-                ajaxStart: function() { $body.addClass("loading");    },
-                ajaxStop: function() { $body.removeClass("loading"); }
-            });
-
             function setCookie(cname, cvalue, exdays) {
                 var d = new Date();
                 d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -98,12 +92,15 @@
                 return "";
             }
             function changeFunc() {
-                var selectBox = document.getElementById("selectBox");
-                var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-                setCookie('device_id', selectedValue, 365);
+                var deviceSelectBox = document.getElementById("device_select_box");
+                var adSelectBox = document.getElementById("ad_select_box");
+                var device_id = deviceSelectBox.options[deviceSelectBox.selectedIndex].value;
+                var link_id = adSelectBox.options[adSelectBox.selectedIndex].value;
+//                setCookie('device_id', selectedValue, 365);
                 $.post("test_ajax.php",
-                    {device_id: selectedValue},
+                    {device_id: device_id, link_id: link_id},
                     function(data){
+                        alert(data);
                         chartData = $.parseJSON(data);
                         google.setOnLoadCallback(drawChart(chartData));
                     });

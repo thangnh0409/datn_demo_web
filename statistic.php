@@ -8,8 +8,6 @@
 
 include 'top_menu.php';
 include 'container.php';
-include 'left_slidebar.php';
-include 'main_content.php';
 
 $server_name = "localhost";
 $username = "root";
@@ -21,33 +19,50 @@ mysql_set_charset('utf8', $conn);
 //check connection
 if(!$conn){
     die("connect fail: ". $conn->connect_error);
+}else {
+    $selected = mysql_select_db($db_name);
 }
-
-echo "<select id='device_select_box' onchange='changeFunc();'>";
-//echo "<option value=\"\">--select device id--</option>";
-
-$selected = mysql_select_db($db_name);
-if($selected){
-//    $sql = "SELECT device_id, count(date) as count_dv FROM widget_publisher_device GROUP BY device_id HAVING count_dv > 8 LIMIT 20";
-    $sql = "SELECT distinct(device_id) from widget_publisher_device LIMIT 20";
+?>
+<table id="tb_res">
+    <tr>
+        <th>Day</th>
+        <th>Sum clicks</th>
+        <th>Sum views</th>
+        <th></th>
+    </tr>
+    <?php
+    $sql = "SELECT sum(clicks) as sum_clicks, sum(views) as sum_views, date FROM `widget_publisher_device` GROUP BY date";
     $retVal = mysql_query($sql, $conn);
+    $old_clicks = 0;
+    $old_views = 0;
     while($row = mysql_fetch_array($retVal, MYSQL_ASSOC)){
-        echo "<option value=\"{$row['device_id']}\">{$row['device_id']} </option>";
+        echo "<tr>".
+            "<td>{$row['date']}</td>";
+        if($old_clicks < $row['sum_clicks']){
+            $value = $row['sum_clicks'] - $old_clicks;
+            echo "<td>{$row['sum_clicks']} <i style='color:blue'>+{$value}</i></td>";
+        }else{
+            $value = $row['sum_clicks'] - $old_clicks;
+            echo "<td>{$row['sum_clicks']} <i style='color:red'>{$value}</i></td>";
+        }
+        if($old_views < $row['sum_views']){
+            $value = $row['sum_views'] - $old_views;
+            echo "<td>{$row['sum_views']} <i style='color:blue'>+{$value}</i></td>";
+        }else{
+            $value = $row['sum_views'] - $old_views;
+            echo "<td>{$row['sum_views']} <i style='color:red'>{$value}</i></td>";
+        }
+        echo "<td><button type='button'>Recommendation</button></td>".
+            "</tr>";
+
+        $old_clicks = $row['sum_clicks'];
+        $old_views = $row['sum_views'];
     }
-}
+    ?>
 
-echo "</select>";
-
-echo "<select id='ad_select_box' onchange='changeFunc();'>";
-//echo "<option value=\"\">--select ad--</option>";
-
-$sql = "SELECT distinct(link_id) from widget_publisher_device LIMIT 20";
-$retVal = mysql_query($sql, $conn);
-while($row = mysql_fetch_array($retVal, MYSQL_ASSOC)){
-    echo "<option value=\"{$row['link_id']}\">{$row['link_id']} </option>";
-}
-
-echo "</select>";
-
+</table>
+<div id="sum_clicks_graph"></div>
+<div id="sum_views_graph"></div>
+<?php
 include 'footer.php';
 ?>

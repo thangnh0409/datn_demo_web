@@ -32,41 +32,40 @@
             var chartData;
             $(document).ready(function() {
 
-                var to = new Date();
-                var from = new Date(to.getTime() - 1000 * 60 * 60 * 24 * 14);
-
-
-                $('#datepicker-calendar').DatePicker({
-                    inline: true,
-                    date: [from, to],
-                    calendars: 3,
-                    mode: 'range',
-                    current: new Date(to.getFullYear(), to.getMonth() - 1, 1),
-                    onChange: function(date, el){
-//                        console.log('date :' + date);
-                        var device = getCookie('device_id');
-//                        alert(device);
-                        $.post("test_ajax.php",
-                            {date: date, device_id: device},
-                            function(data){
-//                                alert(data)
-                                chartData = $.parseJSON(data);
-                                google.setOnLoadCallback(drawChart(chartData));
-                            });
-                    }
-
-                });
-
-                function drawChart(chartData) {
+                $.post("chart_data_ajax.php",
+                    {get_sum_clicks_chart: 1},
+                    function(data){
+                        chartData = $.parseJSON(data);
+                        google.setOnLoadCallback(drawSumClicksChart(chartData));
+                    });
+                $.post("chart_data_ajax.php",
+                    {get_sum_views_chart: 1},
+                    function(data){
+                        chartData = $.parseJSON(data);
+                        google.setOnLoadCallback(drawSumViewsChart(chartData));
+                    });
+                function drawSumClicksChart(chartData) {
                     var data = google.visualization.arrayToDataTable(chartData);
 
                     var options = {
-                        title: 'CTR',
+                        title: 'Clicks statistic',
                         hAxis: {title: 'Ngày',  titleTextStyle: {color: '#333'}},
                         vAxis: {minValue: 0}
                     };
 
-                    var chart = new google.visualization.AreaChart(document.getElementById('main_content'));
+                    var chart = new google.visualization.LineChart(document.getElementById('sum_clicks_graph'));
+                    chart.draw(data, options);
+                }
+                function drawSumViewsChart(chartData) {
+                    var data = google.visualization.arrayToDataTable(chartData);
+
+                    var options = {
+                        title: 'Views statistic',
+                        hAxis: {title: 'Ngày',  titleTextStyle: {color: '#333'}},
+                        vAxis: {minValue: 0}
+                    };
+
+                    var chart = new google.visualization.LineChart(document.getElementById('sum_views_graph'));
                     chart.draw(data, options);
                 }
 
@@ -93,14 +92,14 @@
             }
             function changeFunc() {
                 var deviceSelectBox = document.getElementById("device_select_box");
-                var adSelectBox = document.getElementById("ad_select_box");
+//                var adSelectBox = document.getElementById("ad_select_box");
                 var device_id = deviceSelectBox.options[deviceSelectBox.selectedIndex].value;
-                var link_id = adSelectBox.options[adSelectBox.selectedIndex].value;
+//                var link_id = adSelectBox.options[adSelectBox.selectedIndex].value;
 //                setCookie('device_id', selectedValue, 365);
                 $.post("test_ajax.php",
-                    {device_id: device_id, link_id: link_id},
+                    {device_id: device_id},
                     function(data){
-                        alert(data);
+//                        alert(data);
                         chartData = $.parseJSON(data);
                         google.setOnLoadCallback(drawChart(chartData));
                     });
@@ -114,7 +113,7 @@
                     vAxis: {minValue: 0}
                 };
 
-                var chart = new google.visualization.AreaChart(document.getElementById('main_content'));
+                var chart = new google.visualization.LineChart(document.getElementById('main_content'));
                 chart.draw(data, options);
             }
 
@@ -131,6 +130,7 @@
                         <li><a href="admincp.php">HOME</a></li>
                         <li><a href="filter.php">Filter</a></li>
                         <li><a href="statistic.php">Statistics</a></li>
+                        <li><a href="compare.php">Match</a></li>
                         <li><a href="recommender.php">Recommender</a></li>
                     </ul>
                 </div>
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <div id="title"><h1>Thống kê</h1></div>
-            <div id="datepicker-calendar"></div>
+<!--            <div id="datepicker-calendar"></div>-->
             <!--<div id="sim-calendar"></div>-->
-            <div id="date-range-field"></div>
+<!--            <div id="date-range-field"></div>-->
         </div> <!-- end header -->
